@@ -1,0 +1,143 @@
+ <!---- Header part 1 ---->
+ <div class="color-overlay">
+    <div class="logo">
+        <div id="company"> NCQ</div>
+        <div id="place"> TECHNOLOGIES </div>
+    </div>
+    
+    <div class="phrase">Administrador de tareas</div>  
+</div>            
+
+
+<!------- Menu ------>
+<div class="sticky block" id="menu">
+  <div class="text-end mb-3">
+    <button type="button" class="btn btn-warning" style="padding: 15px;" (click)="ObtenerTareasLista()">
+      <i class="fas fa-sync"></i> Todos
+  </button>
+  &nbsp;
+  <button type="button" class="btn btn-success" style="padding: 15px;" (click)="Agregar()">
+    <i class="fas fa-plus"></i> Agregar
+</button>
+&nbsp;
+<button type="button" class="btn btn-dark" style="padding: 15px;" (click)="Filtrar()">
+  <i class="fas fa-filter"></i> Filtrar
+</button>
+  </div>
+  
+    <table class="site" style="margin: auto;width: 100%;">
+       
+        <thead>
+           
+                <tr>
+                    <th class="title color-bg" id="white-title" style="width: 10%">Descripción</th>
+                    <th class="title color-bg" id="white-title" style="width: 10%">Colaborador</th>
+                    <th class="title color-bg" id="white-title" style="width: 10%">Estado</th>
+                    <th class="title color-bg" id="white-title" style="width: 10%">Prioridad</th>
+                    <th class="title color-bg" id="white-title" style="width: 12%">Fecha Inicio</th>
+                    <th class="title color-bg" id="white-title" style="width: 12%">Fecha Fin</th>
+                    <th class="title color-bg" id="white-title" style="width: 10%">Eliminar</th>
+                    <th class="title color-bg" id="white-title" style="width: 10%">Actualizar</th>
+                </tr>
+           
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of tasks" class="mt-5">
+                <td (click)="EditDescripcion(task)"  [ngClass]="{
+                  'highlighted-bg': task.isHighlighted,
+                  'default-bg': !task.isHighlighted
+                }">
+                <span class="limit-line1"> {{ task.description }}</span>   
+                 </td>
+                <td [ngClass]="{
+                   'highlighted-bg': task.isHighlighted,
+                   'default-bg': !task.isHighlighted
+                  }">
+                    <select
+                    [(ngModel)]="task.assignedTo"
+                    [ngClass]="{'disabled-bg': task.isHighlighted, 'enabled-bg': !task.isHighlighted }" [attr.disabled]="task.isHighlighted ? true : null"        
+                    class="form-select" aria-label="Default select example" disabled>
+                        <option selected>COLABORADOR</option>
+                        <option *ngFor="let colaborador of colaboradores" 
+                                 [value]="colaborador.Id_Colaborador">
+                                 {{ colaborador.Nombre }}
+                       </option>
+                      </select>
+                </td>
+                <td id="site-text" [ngClass]="{
+                    'highlighted-bg': task.isHighlighted,
+                    'default-bg': !task.isHighlighted
+                  }">
+                    <select
+                    [(ngModel)]="task.state"
+                     [ngClass]="{'disabled-bg': task.isHighlighted, 'enabled-bg': !task.isHighlighted }" [attr.disabled]="task.isHighlighted ? true : null"
+                    class="form-select" aria-label="Default select example" disabled>
+                        <option selected>ESTADOS</option>
+                        <option *ngFor="let estado of estados" 
+                                [value]="estado.Id_Estado">
+                                {{ estado.Estado }}
+                        </option>
+                      </select>
+                </td>
+                <td id="site-text" [ngClass]="{
+                   'highlighted-bg': task.isHighlighted,
+                   'default-bg': !task.isHighlighted
+                  }">
+                    <select 
+                    [(ngModel)]="task.priority"
+                    [ngClass]="{'disabled-bg': task.isHighlighted, 'enabled-bg': !task.isHighlighted }" [attr.disabled]="task.isHighlighted ? true : null"
+                    class="form-select" aria-label="Default select example" disabled>
+                        <option selected>PRIORIDAD</option>
+                        <option *ngFor="let prioridad of prioridades" 
+                                [value]="prioridad.Id_Prioridad">
+                                {{ prioridad.Prioridad }}
+                        </option>
+                      </select>
+                </td>
+                <td  
+                [ngClass]="{
+                  'highlighted-bg': task.isHighlighted,
+                  'default-bg': !task.isHighlighted
+                  }"> <input [(ngModel)]="task.startDate" [ngClass]="{'disabled-bg': task.isHighlighted, 'enabled-bg': !task.isHighlighted }" [attr.disabled]="task.isHighlighted ? true : null"
+                    type="date" id="date1" class="form-control" style="color:black" disabled></td>
+               
+                <td
+                 [ngClass]="{
+                     'highlighted-bg': task.isHighlighted,
+                     'default-bg': !task.isHighlighted
+                  }"> <input [(ngModel)]="task.endDate" [ngClass]="{'disabled-bg': task.isHighlighted, 'enabled-bg': !task.isHighlighted }" [attr.disabled]="task.isHighlighted ? true : null"
+                    type="date" id="date2" class="form-control" style="color:black" disabled></td>
+                <td><button type="button" class="btn btn-danger" style="padding: 15px;" (click)="Eliminar(task)">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                </button></td>
+                <td>
+                <button *ngIf="task.isHighlighted" type="button" class="btn btn-primary" style="padding: 15px;" (click)="ValidoEditar(task)">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+
+                <button *ngIf="!task.isHighlighted" type="button" class="btn btn-dark" style="padding: 15px;" (click)="task.isHighlighted=!task.isHighlighted">
+                    <i class="fas fa-times"></i> 
+                  </button>
+                  &nbsp;
+                <button *ngIf="!task.isHighlighted" type="button" class="btn btn-success" style="padding: 15px;" (click)="Editar(task)">
+                    <i class="fas fa-check"></i> 
+                </button>  
+               </td>
+              </tr>
+           
+         
+        </tbody>
+    </table>
+</div>
+
+
+<!---- BODY ---->
+
+
+
+<div class="block" style="width: 70%; margin: 0 auto;">
+ 
+</div>
+
+
+
